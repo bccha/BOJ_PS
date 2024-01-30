@@ -76,6 +76,7 @@ inline bitset<maxVal + 1>* getSieve() {
 
     return ret;
 }
+#endif
 
 inline unsigned long long factorial(int n) {
     if (n == 0) {
@@ -90,18 +91,13 @@ inline unsigned long long factorial(int n) {
     return ret;
 }
 
-#endif
-
 int main() {
     fastio
 
     int numTC;
     cin >> numTC;
-    cin.ignore();
 
-    while (numTC--) {
-
-    }
+    cout << factorial(numTC) << Endl;
 
     return 0;
 }

@@ -7,7 +7,7 @@
 using namespace std;
 
 // 입력 / 출력
-#if 0
+
 void strToken(const string &in, vector<string> &ret) {
     stringstream ss(in);
     string t;
@@ -17,17 +17,14 @@ void strToken(const string &in, vector<string> &ret) {
         ret.push_back(t);
     }
 }
-#endif
 
-#if 0
 void setPrecision(int p) {
     cout << fixed;
     cout.precision(p);
 }
-#endif
 
-#if 0
 // 수학
+
 // 최소공배수
 inline int getGCD(int a, int b) {
     if (a < b) {
@@ -77,31 +74,36 @@ inline bitset<maxVal + 1>* getSieve() {
     return ret;
 }
 
-inline unsigned long long factorial(int n) {
-    if (n == 0) {
-        return 1;
-    }
-
-    unsigned long long ret = 1;
-
-    for (int i = 1; i <= n; ++i) {
-        ret *= i;
-    }
-    return ret;
-}
-
-#endif
-
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    auto *ps = getSieve<1000000>();
+    auto &sieve = *ps;
 
-    while (numTC--) {
+    while (true) {
+        int v;
+        cin >> v;
 
+        if (v == 0) {
+            break;
+        }
+        if (v < 6) {
+            cout << "Goldbach's conjecture is wrong." << Endl;
+        }
+
+        bool ret = false;
+        for (int i = 3; i <= v / 2; ++i) {
+            if (!sieve[i] && !sieve[v - i]) {
+                ret = true;
+                printf("%d = %d + %d\n", v, i, v - i);
+                break;
+            }
+        }
+        if (!ret) {
+            cout << "Goldbach's conjecture is wrong." << Endl;
+        }
     }
 
+    delete ps;
     return 0;
 }

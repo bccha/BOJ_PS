@@ -76,20 +76,6 @@ inline bitset<maxVal + 1>* getSieve() {
 
     return ret;
 }
-
-inline unsigned long long factorial(int n) {
-    if (n == 0) {
-        return 1;
-    }
-
-    unsigned long long ret = 1;
-
-    for (int i = 1; i <= n; ++i) {
-        ret *= i;
-    }
-    return ret;
-}
-
 #endif
 
 int main() {

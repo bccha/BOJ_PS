@@ -76,32 +76,35 @@ inline bitset<maxVal + 1>* getSieve() {
 
     return ret;
 }
-
-inline unsigned long long factorial(int n) {
-    if (n == 0) {
-        return 1;
-    }
-
-    unsigned long long ret = 1;
-
-    for (int i = 1; i <= n; ++i) {
-        ret *= i;
-    }
-    return ret;
-}
-
 #endif
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    int N;
+    cin >> N;
 
-    while (numTC--) {
-
+    int two = 0, five = 0;
+    for (int i = 1; i <= N; ++i) {
+        int v = i;
+        while (v) {
+            if (v % 2) {
+                break;
+            }
+            ++two;
+            v /= 2;
+        }
+        v = i;
+        while (v) {
+            if (v % 5) {
+                break;
+            }
+            ++five;
+            v /= 5;
+        }
     }
+
+    cout << min(two, five) << Endl;
 
     return 0;
 }
