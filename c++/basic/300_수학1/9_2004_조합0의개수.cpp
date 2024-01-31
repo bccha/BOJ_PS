@@ -4,6 +4,11 @@
 #define Endl "\n"
 #define fastio ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
+typedef unsigned char UCHAR;
+typedef unsigned short USHORT;
+typedef unsigned int UINT;
+typedef unsigned long long ULL;
+
 using namespace std;
 
 // 입력 / 출력
@@ -28,7 +33,7 @@ void setPrecision(int p) {
 
 #if 0
 // 수학
-// 최대공약수
+// 최소공배수
 inline int getGCD(int a, int b) {
     if (a < b) {
         swap(a, b);
@@ -44,37 +49,10 @@ inline int getGCD(int a, int b) {
     return b;
 }
 
-// 최소공배수
+// 최대공약수
 inline int getLCM(int a, int b) {
     int gcd = getGCD(a, b);
     return a * b / gcd;
-}
-
-// 에라스토테네스의 체
-// 반드시 return 받은 pointer를 delete 해주어야 한다.
-//    auto *ps = getSieve<1000000>();
-//    auto &sieve = *ps;
-//    delete ps;
-template<int maxVal>
-inline bitset<maxVal + 1>* getSieve() {
-    auto *ret = new bitset<maxVal + 1>();
-    auto &r = *ret;
-
-    r[0] = true;
-    r[1] = true;
-
-    for (int i = 2; i * i <= maxVal; ++i) {
-        if (r[i]) {
-            continue;
-        }
-        int j = i * i;
-        while (j <= maxVal) {
-            r[j] = true;
-            j += i;
-        }
-    }
-
-    return ret;
 }
 
 template <typename T>
@@ -110,18 +88,59 @@ template <typename T>
 inline T combination(T n, T k) {
     return permutation(n, k) / factorial(k);
 }
+
+// 에라스토테네스의 체
+// 반드시 return 받은 pointer를 delete 해주어야 한다.
+//    auto *ps = getSieve<1000000>();
+//    auto &sieve = *ps;
+//    delete ps;
+template<int maxVal>
+inline bitset<maxVal + 1>* getSieve() {
+    auto *ret = new bitset<maxVal + 1>();
+    auto &r = *ret;
+
+    r[0] = true;
+    r[1] = true;
+
+    for (int i = 2; i * i <= maxVal; ++i) {
+        if (r[i]) {
+            continue;
+        }
+        int j = i * i;
+        while (j <= maxVal) {
+            r[j] = true;
+            j += i;
+        }
+    }
+
+    return ret;
+}
 #endif
+
+ULL countNumInFactorial(ULL n, ULL v) {
+    ULL ret = 0;
+    ULL vv = v;
+
+    while (n >= vv) {
+        ret += n / vv;
+        vv *= v;
+    }
+
+    return ret;
+}
+
+
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    int N, M;
+    cin >> N >> M;
 
-    while (numTC--) {
+    ULL five = countNumInFactorial(N, 5) - countNumInFactorial(M, 5) - countNumInFactorial(N - M, 5);
+    ULL two = countNumInFactorial(N, 2) - countNumInFactorial(M, 2) - countNumInFactorial(N - M, 2);
 
-    }
+    cout << min(five, two) << ENDL;
 
     return 0;
 }

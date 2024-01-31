@@ -26,7 +26,7 @@ void setPrecision(int p) {
 }
 #endif
 
-#if 0
+#if 1
 // 수학
 // 최대공약수
 inline int getGCD(int a, int b) {
@@ -117,10 +117,22 @@ int main() {
 
     int numTC;
     cin >> numTC;
-    cin.ignore();
 
     while (numTC--) {
+        int size;
+        cin >> size;
+        vector<int> l(size);
+        for (int i = 0; i != size; ++i) {
+            cin >> l[i];
+        }
 
+        unsigned long long sum = 0;
+        for (int i = 0; i != size - 1; ++i) {
+            for (int j = i + 1; j != size; ++j) {
+                sum += getGCD(l[i], l[j]);
+            }
+        }
+        cout << sum << ENDL;
     }
 
     return 0;

@@ -28,7 +28,7 @@ void setPrecision(int p) {
 
 #if 0
 // 수학
-// 최대공약수
+// 최소공배수
 inline int getGCD(int a, int b) {
     if (a < b) {
         swap(a, b);
@@ -44,7 +44,7 @@ inline int getGCD(int a, int b) {
     return b;
 }
 
-// 최소공배수
+// 최대공약수
 inline int getLCM(int a, int b) {
     int gcd = getGCD(a, b);
     return a * b / gcd;

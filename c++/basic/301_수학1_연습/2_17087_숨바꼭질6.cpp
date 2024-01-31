@@ -26,15 +26,15 @@ void setPrecision(int p) {
 }
 #endif
 
-#if 0
+#if 1
 // 수학
-// 최대공약수
-inline int getGCD(int a, int b) {
+// 최소공배수
+inline unsigned long long  getGCD(unsigned long long  a, unsigned long long  b) {
     if (a < b) {
         swap(a, b);
     }
      while (true) {
-        int remain = a % b;
+        unsigned long long  remain = a % b;
         if (remain == 0) {
             break;
         }
@@ -44,7 +44,7 @@ inline int getGCD(int a, int b) {
     return b;
 }
 
-// 최소공배수
+// 최대공약수
 inline int getLCM(int a, int b) {
     int gcd = getGCD(a, b);
     return a * b / gcd;
@@ -115,13 +115,28 @@ inline T combination(T n, T k) {
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    unsigned long long S;
+    unsigned int N;
+    cin >> N >> S;
 
-    while (numTC--) {
+    vector<unsigned long long> v(100'000);
 
+    for (unsigned int i = 0; i != N; ++i) {
+        unsigned long long t;
+        cin >> t;
+        v[i] = t > S ? t - S : S - t;
     }
+
+    unsigned long long ret = v[0];
+
+    for (auto a : v) {
+        if (a == 0) {
+            continue;
+        }
+        ret = getGCD(a, ret);
+    }
+
+    cout << ret << ENDL;
 
     return 0;
 }
