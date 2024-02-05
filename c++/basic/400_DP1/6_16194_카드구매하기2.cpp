@@ -118,16 +118,26 @@ inline T combination(T n, T k) {
 }
 #endif
 
+uint ret[10'01];
+
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    uint N, P[1'001];
+    memset(ret, -1, sizeof(ret));
+    ret[0] = 0;
+    cin >> N;
+    for (uint i = 1; i <= N; ++i) {
+        cin >> P[i];
     }
+
+    for (uint i = 1; i <= N; ++i) {
+        for (uint j = 1; j <= i; ++j) {
+            ret[i] = min(ret[i], ret[i - j] + P[j]);
+        }
+    }
+
+    cout << ret[N] << Endl;
 
     return 0;
 }

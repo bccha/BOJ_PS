@@ -118,16 +118,22 @@ inline T combination(T n, T k) {
 }
 #endif
 
+ullong R[91][2];
+
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    int N;
+    cin >> N;
 
-    while (numTC--) {
+    R[1][1] = 1;
 
+    for (int i = 2; i <= N; ++i) {
+        R[i][0] = R[i - 1][0] + R[i - 1][1];
+        R[i][1] = R[i - 1][0];
     }
+
+    cout << R[N][0] + R[N][1] << Endl;
 
     return 0;
 }

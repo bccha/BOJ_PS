@@ -118,16 +118,52 @@ inline T combination(T n, T k) {
 }
 #endif
 
+int N;
+int A[1001] = {0, };
+int memo[1001] = {0, };
+
+#if 0
+int solve(int cur, int prev) {
+    if (cur == N + 1) {
+        return 0;
+    }
+
+    if (memo[cur][prev] != -1) {
+        return memo[cur][prev];
+    }
+
+    int ret1 = 0, ret2 = 0;
+
+    if (A[cur] > A[prev]) {
+        ret1 = solve(cur + 1, cur) + 1;
+    }
+    ret2 = solve(cur + 1, prev);
+    ret2 = max(ret1, ret2);
+    memo[cur][prev] = ret2;
+    return ret2;
+}
+#endif
+
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> N;
+    for (int i = 1; i <= N; ++i) {
+        cin >> A[i];
     }
+
+    int ret = 0;
+    for (int i = 1; i <= N; ++i) {
+        for (int j = 0; j < i; ++j) {
+            if (A[i] > A[j]) {
+                memo[i] = max(memo[j] + 1, memo[i]);
+            }
+        }
+        ret = max(ret, memo[i]);
+    }
+
+    cout << ret << Endl;
 
     return 0;
 }
+

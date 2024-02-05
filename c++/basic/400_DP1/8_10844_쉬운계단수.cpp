@@ -118,16 +118,37 @@ inline T combination(T n, T k) {
 }
 #endif
 
+int stair[101][10];
+
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    int N;
+    cin >> N;
 
-    while (numTC--) {
-
+    for (int i = 1; i <= 9; ++i) {
+        stair[1][i] = 1;
     }
+
+    for (int i = 2; i <= N; ++i) {
+        for (int j = 0; j <= 9; ++j) {
+            if (j != 0) {
+                stair[i][j] += stair[i - 1][j - 1];
+                stair[i][j] %= 1'000'000'000;
+            }
+            if (j != 9) {
+                stair[i][j] += stair[i - 1][j + 1];
+                stair[i][j] %= 1'000'000'000;
+            }
+        }
+    }
+
+    int ret = 0;
+    for (int i = 0; i <= 9; ++i) {
+        ret += stair[N][i];
+        ret %= 1'000'000'000;
+    }
+    cout << ret << Endl;
 
     return 0;
 }

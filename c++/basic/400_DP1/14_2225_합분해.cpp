@@ -118,16 +118,30 @@ inline T combination(T n, T k) {
 }
 #endif
 
+#define DIV 1'000'000'000
+
+int memo[201][201];
+
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    int N, K;
 
-    while (numTC--) {
+    cin >> N >> K;
 
+    for (int i = 0; i <= N; ++i) {
+        memo[1][i] = 1;
     }
+
+    for (int i = 2; i <= K; ++i) {
+        for (int j = 0; j <= N; ++j) {
+            for (int k = 0; k <= j; ++k) {
+                memo[i][j] = (memo[i][j] + memo[i - 1][k]) % DIV;
+            }
+        }
+    }
+
+    cout << memo[K][N] << Endl;
 
     return 0;
 }

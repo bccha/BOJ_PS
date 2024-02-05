@@ -118,15 +118,44 @@ inline T combination(T n, T k) {
 }
 #endif
 
+#define N_RANGE 100'000
+#define DIV 1'000'000'009
+
+int N[N_RANGE + 1][4] = {0, };
+
 int main() {
     fastio
 
-    int numTC;
+    N[1][1] = 1;
+    N[2][2] = 1;
+    N[3][1] = 1;
+    N[3][2] = 1;
+    N[3][3] = 1;
+
+    for (int i = 4; i <= N_RANGE; ++i) {
+        for (int j = 1; j <= 3; ++j) {
+            for (int k = 1; k <= 3; ++k) {
+                if (j == k) {
+                    continue;
+                }
+                N[i][j] += N[i - j][k];
+                N[i][j] %= DIV;
+            }
+        }
+    }
+
+    int numTC = 0;
     cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    while (numTC) {
+        --numTC;
+        int v;
+        cin >> v;
+        int ret = 0;
+        for (int i = 1; i <= 3; ++i) {
+            ret += N[v][i];
+            ret %= DIV;
+        }
+        cout << ret << Endl;
     }
 
     return 0;

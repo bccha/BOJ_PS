@@ -8,7 +8,7 @@ using namespace std;
 
 typedef unsigned char uchar;
 typedef unsigned short ushort;
-typedef unsigned int uint; // 0~약40억, int는 -20억~20억
+typedef unsigned int uint;
 typedef long long llong;
 typedef unsigned long long ullong;
 
@@ -121,13 +121,31 @@ inline T combination(T n, T k) {
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    uint A, B;
+    cin >> A >> B;
+    uint m, n;
+    cin >> m;
 
-    while (numTC--) {
+    uint v = 0;
 
+    while (m) {
+        cin >> n;
+        v *= A;
+        v += n;
+        --m;
     }
+
+    vector<int> b;
+
+    while (v) {
+        b.push_back(v % B);
+        v /= B;
+    }
+
+    for (auto i = b.rbegin(); i != b.rend(); ++i) {
+        cout << *i << " ";
+    }
+    cout << Endl;
 
     return 0;
 }

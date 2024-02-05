@@ -12,6 +12,7 @@ typedef unsigned int uint; // 0~약40억, int는 -20억~20억
 typedef long long llong;
 typedef unsigned long long ullong;
 
+
 // 입력 / 출력
 #if 0
 void strToken(const string &in, vector<string> &ret) {
@@ -32,7 +33,7 @@ void setPrecision(int p) {
 }
 #endif
 
-#if 0
+#if 1
 // 수학
 // 최대공약수
 inline int getGCD(int a, int b) {
@@ -121,13 +122,28 @@ inline T combination(T n, T k) {
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    int N;
+    cin >> N;
 
-    while (numTC--) {
-
+    if (N == 1) {
+        return 0;
     }
+
+    auto p = getSieve<10'000'000>();
+
+    for (int i = 2; i <= N; ++i) {
+        if (N < i) {
+            break;
+        }
+        if (!(*p)[i]) {
+            while  (N % i == 0) {
+                cout << i << Endl;
+                N /= i;
+            }
+        }
+    }
+
+    delete p;
 
     return 0;
 }

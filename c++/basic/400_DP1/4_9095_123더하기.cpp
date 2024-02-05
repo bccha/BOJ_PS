@@ -118,16 +118,28 @@ inline T combination(T n, T k) {
 }
 #endif
 
+int N[11] = {0, };
+
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    N[1] = 1;
+    N[2] = 2;
+    N[3] = 4;
 
-    while (numTC--) {
-
+    for (int i = 4; i <= 10; ++i) {
+        N[i] = N[i - 1] + N[i - 2] + N[i - 3];
     }
+
+    int numTC = 0;
+    cin >> numTC;
+    while (numTC) {
+        --numTC;
+        int v;
+        cin >> v;
+        cout << N[v] << Endl;
+    }
+
 
     return 0;
 }

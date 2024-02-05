@@ -118,16 +118,46 @@ inline T combination(T n, T k) {
 }
 #endif
 
+int makeOne(int N) {
+    if (N == 1) {
+        return 0;
+    }
+    int ret = 987654321;
+    if (N % 3 == 0) {
+        ret = min(ret, makeOne(N / 3));
+    }
+    if (N % 2 == 0) {
+        ret = min(ret, makeOne(N / 2));
+    }
+
+    return min(ret, makeOne(N - 1));
+}
+
+
+int one[1'000'001] = {0, };
+
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    int N;
+    cin >> N;
 
-    while (numTC--) {
+    one[1] = 0;
 
+    for (int i = 2; i <= N; ++i) {
+        int r = 987654321;
+        if (i % 2 == 0) {
+            r = min(r, one[i / 2] + 1);
+        }
+        if (i % 3 == 0) {
+            r = min(r, one[i / 3] + 1);
+        }
+        r = min(r, one[i - 1] + 1);
+        one[i] = r;
     }
+
+    cout << one[N] << Endl;
+
 
     return 0;
 }

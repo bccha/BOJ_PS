@@ -6,6 +6,12 @@
 
 using namespace std;
 
+typedef unsigned char uchar;
+typedef unsigned short ushort;
+typedef unsigned int uint; // 0~약40억, int는 -20억~20억
+typedef long long llong;
+typedef unsigned long long ullong;
+
 // 입력 / 출력
 #if 0
 void strToken(const string &in, vector<string> &ret) {

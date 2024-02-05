@@ -118,16 +118,26 @@ inline T combination(T n, T k) {
 }
 #endif
 
+#define MAX_N 100'000
+
+int memo[MAX_N + 1];
+
 int main() {
-    fastio
+    fastio;
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    int N;
+    cin >> N;
 
-    while (numTC--) {
+    memo[0] = 0;
 
+    for (int i = 1; i <= N; ++i) {
+        memo[i] = 1'000'000'000;
+        for (int j = 1; j * j <= i; ++j) {
+            memo[i] = min(memo[i], memo[i - j * j] + 1);
+        }
     }
+
+    cout << memo[N] << Endl;
 
     return 0;
 }

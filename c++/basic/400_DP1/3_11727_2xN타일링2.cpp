@@ -118,16 +118,24 @@ inline T combination(T n, T k) {
 }
 #endif
 
+int N[1001] = {0, };
+
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    int n;
+    cin >> n;
 
-    while (numTC--) {
+    N[1] = 1;
+    N[2] = 3;
 
+    for (int i = 3; i <= n; ++i) {
+        N[i] = N[i - 1] + 2 * N[i - 2];
+        N[i] %= 10'007;
     }
+
+    cout << N[n] << Endl;
+
 
     return 0;
 }
