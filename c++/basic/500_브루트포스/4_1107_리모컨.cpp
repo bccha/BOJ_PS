@@ -121,13 +121,14 @@ inline T combination(T n, T k) {
 int N, M;
 vector<int> m;
 
-int solve(int digit, int cur) {
-    if (digit == 6) {
+int solve(int digit, int cur, bool cont) {
+    if (digit == 8) {
         return 987654321;;
     }
     int ret = digit + abs(cur - N);
     for (int c : m) {
-        ret = min(ret, solve(digit + 1, cur * 10 + c));
+        int next = cont ? cur * 10 + c : c;
+        ret = min(ret, solve(digit + 1, next, true));
     }
     return ret;
 }
@@ -146,7 +147,7 @@ int main() {
         m.erase(remove(m.begin(), m.end(), k), m.end());
     }
 
-    int minDiff = min(solve(0, 0), abs(N - 100));
+    int minDiff = min(solve(0, 100, false), abs(N - 100));
 
     cout << minDiff << Endl;
 
