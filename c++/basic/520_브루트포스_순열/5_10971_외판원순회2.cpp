@@ -116,6 +116,7 @@ template <typename T>
 inline T combination(T n, T k) {
     return permutation(n, k) / factorial(k);
 }
+#endif
 
 bool next_permutation(vector<int> &l) {
     int R = l.size();
@@ -138,18 +139,89 @@ bool next_permutation(vector<int> &l) {
     sort(l.begin() + i + 1, l.end());
     return true;
 }
-#endif
+
+void permutation() {
+    int R;
+    cin >> R;
+
+    vector<int> l(R);
+    
+    for (int i = 1; i <= R; ++i) {
+        l[i - 1] = i;
+    }
+
+    int cnt = 0;
+    do {
+        for (auto v : l) {
+            cout << v << " ";
+        }
+        cout << Endl;
+        ++cnt;
+    } while (next_permutation(l));
+    cout << cnt << Endl;
+
+}
+
+void combination() {
+    int R, C;
+    cin >> R >> C;
+
+    vector<int> l(R);
+
+    for (int i = C; i != R; ++i) {
+        l[i] = 1;
+    }
+
+    int cnt = 0;
+    do {
+        for (int i = 0; i != R; ++i) {
+            if (l[i] == 0) {
+                cout << i + 1 << " ";
+            }
+        }
+        cout << Endl;
+        ++cnt;
+    } while (next_permutation(l));
+    cout << cnt << Endl;
+
+}
+
+int N;
+int W[11][11];
+
+int cost(const vector<int> v) {
+    int ret = 0;
+    for (int i = 0; i != N - 1; ++i) {
+        ret += W[v[i]][v[i + 1]];
+    }
+    ret += W[v[N - 1]][v[0]];
+    return ret;
+}
 
 int main() {
     fastio
-
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    
+    cin >> N;
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            cin >> W[i][j];
+            if (W[i][j] == 0) {
+                W[i][j] = 100 * 1'000'000;
+            }
+        }
     }
+
+    vector<int> v(N);
+    for (int i = 0; i != N; ++i) {
+        v[i] = i;
+    }
+
+    int ret = 987'654'321;
+    do {
+        ret = min(ret, cost(v));
+    } while (next_permutation(v));
+
+    cout << ret << Endl;
 
     return 0;
 }

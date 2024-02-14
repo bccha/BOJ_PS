@@ -116,6 +116,7 @@ template <typename T>
 inline T combination(T n, T k) {
     return permutation(n, k) / factorial(k);
 }
+#endif
 
 bool next_permutation(vector<int> &l) {
     int R = l.size();
@@ -138,18 +139,89 @@ bool next_permutation(vector<int> &l) {
     sort(l.begin() + i + 1, l.end());
     return true;
 }
-#endif
+
+void permutation() {
+    int R;
+    cin >> R;
+
+    vector<int> l(R);
+    
+    for (int i = 1; i <= R; ++i) {
+        l[i - 1] = i;
+    }
+
+    int cnt = 0;
+    do {
+        for (auto v : l) {
+            cout << v << " ";
+        }
+        cout << Endl;
+        ++cnt;
+    } while (next_permutation(l));
+    cout << cnt << Endl;
+
+}
+
+void combination() {
+    int R, C;
+    cin >> R >> C;
+
+    vector<int> l(R);
+
+    for (int i = C; i != R; ++i) {
+        l[i] = 1;
+    }
+
+    int cnt = 0;
+    do {
+        for (int i = 0; i != R; ++i) {
+            if (l[i] == 0) {
+                cout << i + 1 << " ";
+            }
+        }
+        cout << Endl;
+        ++cnt;
+    } while (next_permutation(l));
+    cout << cnt << Endl;
+
+}
 
 int main() {
     fastio
+    
+    while (true) {
+        int N;
+        vector<int> v;
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+        cin >> N;
+        if (N == 0) {
+            break;
+        }
+        for (int i = 0; i != N; ++i) {
+            int a;
+            cin >> a;
+            v.push_back(a);
+        }
 
-    while (numTC--) {
+        sort(v.begin(), v.end());
 
+        vector<int> c(N);
+        for (int i = 0; i != 6; ++i) {
+            c[i] = -1;
+        }
+
+        int cnt = 0;
+        do {
+            for (int i = 0; i != N; ++i) {
+                if (c[i] == -1) {
+                    cout << v[i] << " ";
+                }
+            }
+            cout << Endl;
+        } while (next_permutation(c));
+        cout << Endl;
     }
+
 
     return 0;
 }

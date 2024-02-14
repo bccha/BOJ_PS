@@ -116,28 +116,6 @@ template <typename T>
 inline T combination(T n, T k) {
     return permutation(n, k) / factorial(k);
 }
-
-bool next_permutation(vector<int> &l) {
-    int R = l.size();
-    int i = R - 2;
-    while (i >= 0 && l[i] >= l[i + 1]) {
-        --i;
-    }
-    if (i < 0) {
-        return false;
-    }
-    int target = -1;
-    for (int j = R - 1; j > i; --j) {
-        if (l[j] > l[i]) {
-            if (target == -1 || l[target] > l[j]) {
-                target = j;
-            }
-        }
-    }
-    iter_swap(l.begin() + i, l.begin() + target);
-    sort(l.begin() + i + 1, l.end());
-    return true;
-}
 #endif
 
 int main() {

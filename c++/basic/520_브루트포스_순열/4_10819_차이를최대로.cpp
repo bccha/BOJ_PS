@@ -116,6 +116,7 @@ template <typename T>
 inline T combination(T n, T k) {
     return permutation(n, k) / factorial(k);
 }
+#endif
 
 bool next_permutation(vector<int> &l) {
     int R = l.size();
@@ -138,18 +139,35 @@ bool next_permutation(vector<int> &l) {
     sort(l.begin() + i + 1, l.end());
     return true;
 }
-#endif
+
+int N;
+vector<int> v;
+
+int calc(const vector<int> &v) {
+    int ret = 0;
+    for (int i = 1; i != N; ++i) {
+        ret += abs(v[i] - v[i - 1]);
+    }
+    return ret;
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> N;
+    for (int i = 0; i != N; ++i) {
+        int a;
+        cin >> a;
+        v.push_back(a);
     }
+    sort(v.begin(), v.end());
 
+    int ret = 0;
+    do {
+        ret = max(ret, calc(v));
+    } while (next_permutation(v));
+
+    cout << ret << Endl;
+    
     return 0;
 }
