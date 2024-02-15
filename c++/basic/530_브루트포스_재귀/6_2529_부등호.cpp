@@ -141,27 +141,56 @@ bool next_permutation(vector<int> &l) {
 }
 #endif
 
-#if 0
-// string 반복  예) 'a' * 5
-// string s = string(5, 'a');
+int k;
+char op[10];
+bool sel[10];
 
-// int to string
-// to_string(5);
+string minStr, maxStr;
 
-// string to int
-// stoi(s);
-#endif
+void solve(int idx, int v, string cur) {
+    if (idx >= k) {
+        //cout << cur << el;
+        if (minStr.compare(cur) > 0) {
+            minStr = cur;
+        }
+        if (maxStr.compare(cur) < 0) {
+            maxStr = cur;
+        }
+        return;
+    }
+    for (int i = 0; i != 10; ++i) {
+        if (sel[i]) {
+            continue;
+        }
+        if (idx != -1) {
+            if (op[idx] == '>' && v <= i) {
+                continue;
+            }
+            if (op[idx] == '<' && v >= i) {
+                continue;
+            }
+        }
+        sel[i] = true;
+        solve(idx + 1, i, cur + to_string(i));
+        sel[i] = false;
+    }
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> k;
+    for (int i = 0; i != k; ++i) {
+        cin >> op[i];
     }
+
+    minStr = string(k + 1, '9');
+    maxStr = string(k + 1, '0');
+
+    solve(-1, -1, "");
+
+    cout << maxStr << el;
+    cout << minStr << el;
 
     return 0;
 }

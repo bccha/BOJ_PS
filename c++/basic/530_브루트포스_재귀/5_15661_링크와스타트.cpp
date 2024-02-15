@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
 
-#define ENDL    "\n"
-#define Endl    ENDL
-#define el      ENDL
+#define ENDL "\n"
+#define Endl "\n"
 #define fastio ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
 using namespace std;
@@ -117,6 +116,7 @@ template <typename T>
 inline T combination(T n, T k) {
     return permutation(n, k) / factorial(k);
 }
+#endif
 
 bool next_permutation(vector<int> &l) {
     int R = l.size();
@@ -139,29 +139,62 @@ bool next_permutation(vector<int> &l) {
     sort(l.begin() + i + 1, l.end());
     return true;
 }
-#endif
 
-#if 0
-// string 반복  예) 'a' * 5
-// string s = string(5, 'a');
+int N;
+int S[21][21];
 
-// int to string
-// to_string(5);
+int score(vector<int> t) {
+    int sum = 0;
+    for (int i = 0; i != t.size() - 1; ++i) {
+        for (int j = i + 1; j != t.size(); ++j) {
+            sum += S[t[i]][t[j]] + S[t[j]][t[i]];
+        }
+    }
+    return sum;
+}
 
-// string to int
-// stoi(s);
-#endif
+int solve(int k) {
+    vector<int> c(N);
+    for (int i = k; i != N; ++i) {
+        c[i] = 1;
+    }
+
+    int ret = 987654321;
+    do {
+        vector<int> t1;
+        vector<int> t2;
+        for (int i = 0; i != N; ++i) {
+            if (c[i]) {
+                t1.push_back(i);
+            } else {
+                t2.push_back(i);
+            }
+        }
+        ret = min(ret, abs(score(t1) - score(t2)));
+    } while (next_permutation(c));
+
+    return ret;
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> N;
+    for (int i = 0; i != N; ++i) {
+        for (int j = 0; j != N; ++j) {
+            cin >> S[i][j];
+        }
     }
+
+    int ret = 987654321;
+#if 1
+    for (int i = 1; i <= N / 2; ++i) {
+        ret = min(ret, solve(i));
+    }
+#else
+    ret = min(ret, solve(N / 2));
+#endif
+    cout << ret << Endl;
 
     return 0;
 }

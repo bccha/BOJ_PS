@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 
-#define ENDL "\n"
-#define Endl "\n"
+#define ENDL    "\n"
+#define Endl    ENDL
+#define el      ENDL
 #define fastio ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
 using namespace std;
@@ -138,6 +139,17 @@ bool next_permutation(vector<int> &l) {
     sort(l.begin() + i + 1, l.end());
     return true;
 }
+#endif
+
+#if 0
+// string 반복  예) 'a' * 5
+// string s = string(5, 'a');
+
+// int to string
+// to_string(5);
+
+// string to int
+// stoi(s);
 #endif
 
 int main() {

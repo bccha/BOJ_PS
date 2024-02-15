@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
 
-#define ENDL    "\n"
-#define Endl    ENDL
-#define el      ENDL
+#define ENDL "\n"
+#define Endl "\n"
 #define fastio ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
 using namespace std;
@@ -117,6 +116,7 @@ template <typename T>
 inline T combination(T n, T k) {
     return permutation(n, k) / factorial(k);
 }
+#endif
 
 bool next_permutation(vector<int> &l) {
     int R = l.size();
@@ -139,29 +139,75 @@ bool next_permutation(vector<int> &l) {
     sort(l.begin() + i + 1, l.end());
     return true;
 }
-#endif
 
-#if 0
-// string 반복  예) 'a' * 5
-// string s = string(5, 'a');
+void permutation() {
+    int R;
+    cin >> R;
 
-// int to string
-// to_string(5);
+    vector<int> l(R);
+    
+    for (int i = 1; i <= R; ++i) {
+        l[i - 1] = i;
+    }
 
-// string to int
-// stoi(s);
-#endif
+    int cnt = 0;
+    do {
+        for (auto v : l) {
+            cout << v << " ";
+        }
+        cout << Endl;
+        ++cnt;
+    } while (next_permutation(l));
+    cout << cnt << Endl;
+
+}
+
+inline bool vowel(char a) {
+    return a == 'a' || a == 'e' || a == 'i' || a == 'o' || a == 'u';
+}
+
+void combination() {
+    int L, C;
+    cin >> L >> C;
+
+    vector<char> ch(C);
+    vector<int> l(C);
+    vector<int> vo(C);
+
+    for (int i = 0; i != C; ++i) {
+        cin >> ch[i];
+    }
+
+    sort(ch.begin(), ch.end());
+
+    for (int i = 0; i != C; ++i) {
+        vo[i] += vowel(ch[i]) ? 1 : 0;
+    }
+
+    for (int i = L; i != C; ++i) {
+        l[i] = 1;
+    }
+
+    int cnt = 0;
+    do {
+        string ret = "";
+        int numV = 0;
+        for (int i = 0; i != C; ++i) {
+            if (l[i] == 0) {
+                ret += ch[i];
+                numV += vo[i];
+            }
+        }
+        if (numV >= 1 && ret.length() - numV >= 2) {
+            cout << ret << Endl;
+        }
+    } while (next_permutation(l));
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
-    }
+    combination();
 
     return 0;
 }

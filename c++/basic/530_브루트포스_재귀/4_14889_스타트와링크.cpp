@@ -187,11 +187,14 @@ int main() {
     }
 
     int ret = 987654321;
+#if 0
     for (int i = 1; i <= N / 2; ++i) {
         ret = min(ret, solve(i));
     }
+#else
+    ret = min(ret, solve(N / 2));
+#endif
     cout << ret << Endl;
-
 
     return 0;
 }

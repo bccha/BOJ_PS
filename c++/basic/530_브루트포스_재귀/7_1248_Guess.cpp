@@ -152,16 +152,57 @@ bool next_permutation(vector<int> &l) {
 // stoi(s);
 #endif
 
+int n;
+string seq;
+char mat[11][11];
+int sum[12][12];
+int result[11];
+
+bool solve(int idx) {
+    if (idx == n) {
+        for (int i = 0; i != n; ++i) {
+            cout << result[i] << " ";
+        }
+        cout << Endl;
+        return true;
+    }
+
+    for (int i = -10; i <= 10; ++i) {
+        bool ok = true;
+        for (int j = 0; j <= idx; ++j) {
+            sum[j][idx + 1] = sum[j][idx] + i;
+            if (!((mat[j][idx] == '+' && sum[j][idx + 1] > 0)
+                    || (mat[j][idx] == '-' && sum[j][idx + 1] < 0)
+                    || (mat[j][idx] == '0' && sum[j][idx + 1] == 0))) {
+                result[idx] = i;
+                ok = false;
+                break;
+            }
+        }
+        if (ok) {
+            result[idx] = i;
+            if (solve(idx + 1)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    cin >> n >> seq;
 
-    while (numTC--) {
-
+    int k = 0;
+    for (int i = 0; i != n; ++i) {
+        for (int j = i; j != n; ++j) {
+            mat[i][j] = seq[k++];
+        }
     }
+
+    solve(0);
 
     return 0;
 }

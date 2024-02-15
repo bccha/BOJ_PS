@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
 
-#define ENDL    "\n"
-#define Endl    ENDL
-#define el      ENDL
+#define ENDL "\n"
+#define Endl "\n"
 #define fastio ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
 using namespace std;
@@ -117,6 +116,7 @@ template <typename T>
 inline T combination(T n, T k) {
     return permutation(n, k) / factorial(k);
 }
+#endif
 
 bool next_permutation(vector<int> &l) {
     int R = l.size();
@@ -139,29 +139,60 @@ bool next_permutation(vector<int> &l) {
     sort(l.begin() + i + 1, l.end());
     return true;
 }
-#endif
 
-#if 0
-// string 반복  예) 'a' * 5
-// string s = string(5, 'a');
+void permutation() {
+    int R;
+    cin >> R;
 
-// int to string
-// to_string(5);
+    vector<int> l(R);
+    
+    for (int i = 1; i <= R; ++i) {
+        l[i - 1] = i;
+    }
 
-// string to int
-// stoi(s);
-#endif
+    int cnt = 0;
+    do {
+        for (auto v : l) {
+            cout << v << " ";
+        }
+        cout << Endl;
+        ++cnt;
+    } while (next_permutation(l));
+    cout << cnt << Endl;
+
+}
+
+void combination() {
+    int R, C;
+    cin >> R >> C;
+
+    vector<int> l(R);
+
+    for (int i = C; i != R; ++i) {
+        l[i] = 1;
+    }
+
+    int cnt = 0;
+    do {
+        for (int i = 0; i != R; ++i) {
+            if (l[i] == 0) {
+                cout << i + 1 << " ";
+            }
+        }
+        cout << Endl;
+        ++cnt;
+    } while (next_permutation(l));
+    cout << cnt << Endl;
+
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
-    }
+    cout << "Permutation" << endl;
+    permutation();
+    cout << "Combination" << endl;
+    combination();
 
     return 0;
 }
