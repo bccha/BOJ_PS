@@ -192,10 +192,35 @@ void bfs(int f) {
 #endif
 
 int V, E;
-vector<int> A[20001];
 int visited[20001];
 
+bool bfs(int start, auto &A) {
+    deque<pair<int, int>> q;
+    visited[start] = 1;
+    q.push_back({start, 1});
+
+    while (!q.empty()) {
+        int cur = q.front().first;
+        int curG = q.front().second;
+        q.pop_front();
+        for (auto n : A[cur]) {
+            if (visited[n]) {
+                if (curG % 2 == visited[n] % 2) {
+                    return false;
+                }
+                continue;
+            }
+            visited[n] = curG + 1;
+            q.push_back({n, curG + 1});
+        }
+    }
+    return true;
+}
+
 void run() {
+    vector<int> A[20001];
+    memset(visited, 0, sizeof(visited));
+
     cin >> V >> E;
 
     for (int i = 0; i != E; ++i) {
@@ -205,30 +230,15 @@ void run() {
         A[t].push_back(f);
     }
 
-    deque<int> q;
-    int bi = 1;
-    visited[1] = bi++;
-    q.push_back(1);
-
-
-    while (!q.empty()) {
-        int cur = q.front();
-        q.pop_front();
-        for (auto n : A[cur]) {
-            if (visited[n]) {
-                if (visited[n] % 2 != bi %2) {
-                    cout << "NO" << el;
-                    return;
-                }
-                continue;
-            }
-            visited[n] = bi;
-            q.push_back(n);
+    bool ret = true;
+    for (int i = 1; i <= V; ++i) {
+        if (visited[i]) {
+            continue;
         }
-        ++bi;
+        ret &= bfs(i, A);
     }
+    cout << (ret ? "YES" : "NO") << el;
 
-    cout << "YES" << el;
 }
 
 int main() {
