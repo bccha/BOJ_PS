@@ -152,46 +152,6 @@ bool next_permutation(vector<int> &l) {
 // stoi(s);
 #endif
 
-#if 0
-// basic code of DFS, BFS
-int N, M, V;
-vector<int> A[1001];
-int visited[1001];
-
-void dfs(int f) {
-    cout << f << " ";
-    for (auto n : A[f]) {
-        if (visited[n]) {
-            continue;
-        }
-        visited[n] = 1;
-        dfs(n);
-    }
-}
-
-void bfs(int f) {
-    deque<int> q;
-    visited[f] = 1;
-    q.push_back(f);
-
-
-    while (!q.empty()) {
-        int cur = q.front();
-        cout << cur << " ";
-        q.pop_front();
-        for (auto n : A[cur]) {
-            if (visited[n]) {
-                continue;
-            }
-            visited[n] = 1;
-            q.push_back(n);
-        }
-    }
-    cout << el;
-}
-#endif
-
-
 int main() {
     fastio
 

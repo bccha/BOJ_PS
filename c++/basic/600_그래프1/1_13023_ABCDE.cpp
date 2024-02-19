@@ -152,56 +152,57 @@ bool next_permutation(vector<int> &l) {
 // stoi(s);
 #endif
 
-#if 0
-// basic code of DFS, BFS
-int N, M, V;
-vector<int> A[1001];
-int visited[1001];
+int N, M;
+// sparse라면 전체 array 잡아놓는 것은 속도가 느리다.
+//int F[2001][2001];
+vector<int> F[2001];
+int visited[2001];
 
-void dfs(int f) {
-    cout << f << " ";
-    for (auto n : A[f]) {
-        if (visited[n]) {
+bool dfs(int f, int cur) {
+    if (cur == 5) {
+        cout << 1 << el;
+        exit(0);
+        return true;
+    }
+
+    bool ret = false;
+    for (auto i : F[f]) {
+        if (visited[i]) {
             continue;
         }
-        visited[n] = 1;
-        dfs(n);
-    }
-}
-
-void bfs(int f) {
-    deque<int> q;
-    visited[f] = 1;
-    q.push_back(f);
-
-
-    while (!q.empty()) {
-        int cur = q.front();
-        cout << cur << " ";
-        q.pop_front();
-        for (auto n : A[cur]) {
-            if (visited[n]) {
-                continue;
-            }
-            visited[n] = 1;
-            q.push_back(n);
+        visited[i] = 1;
+        ret = dfs(i, cur + 1);
+        if (ret) {
+            return true;
         }
+        visited[i] = 0;
     }
-    cout << el;
-}
-#endif
 
+    return ret;
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> N >> M;
+    for (int i = 0; i != M; ++i) {
+        int f, t;
+        cin >> f >> t;
+        F[f].push_back(t);
+        F[t].push_back(f);
     }
+
+    bool ret = false;
+    for (int i = 0; i != N; ++i) {
+        visited[i] = 1;
+        ret = dfs(i, 1);
+        visited[i] = 0;
+        if (ret) {
+            break;
+        }
+    }
+
+    cout << (ret ? 1 : 0) << el;
 
     return 0;
 }

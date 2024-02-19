@@ -152,14 +152,12 @@ bool next_permutation(vector<int> &l) {
 // stoi(s);
 #endif
 
-#if 0
 // basic code of DFS, BFS
-int N, M, V;
+int N, M;
 vector<int> A[1001];
 int visited[1001];
 
 void dfs(int f) {
-    cout << f << " ";
     for (auto n : A[f]) {
         if (visited[n]) {
             continue;
@@ -169,39 +167,28 @@ void dfs(int f) {
     }
 }
 
-void bfs(int f) {
-    deque<int> q;
-    visited[f] = 1;
-    q.push_back(f);
-
-
-    while (!q.empty()) {
-        int cur = q.front();
-        cout << cur << " ";
-        q.pop_front();
-        for (auto n : A[cur]) {
-            if (visited[n]) {
-                continue;
-            }
-            visited[n] = 1;
-            q.push_back(n);
-        }
-    }
-    cout << el;
-}
-#endif
-
-
+// union find 로도 가능
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    cin >> N >> M;
 
-    while (numTC--) {
-
+    for (int i = 0; i != M; ++i) {
+        int f, t;
+        cin >> f >> t;
+        A[f].push_back(t);
+        A[t].push_back(f);
     }
+
+    int n = 0;
+    for (int i = 1; i <= N; ++i) {
+        if (visited[i]) {
+            continue;
+        }
+        dfs(i);
+        ++n;
+    }
+    cout << n << el;
 
     return 0;
 }

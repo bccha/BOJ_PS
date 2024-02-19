@@ -191,17 +191,28 @@ void bfs(int f) {
 }
 #endif
 
-
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    cin >> N >> M >> V;
 
-    while (numTC--) {
-
+    for (int i = 0; i != M; ++i) {
+        int f, t;
+        cin >> f >> t;
+        A[f].push_back(t);
+        A[t].push_back(f);
     }
+    for (int i = 1; i <= N; ++i) {
+        sort(A[i].begin(), A[i].end());
+    }
+
+    visited[V] = 1;
+    dfs(V);
+    cout << el;
+
+    memset(visited, 0, sizeof(visited));
+
+    bfs(V);
 
     return 0;
 }

@@ -191,16 +191,53 @@ void bfs(int f) {
 }
 #endif
 
+int V, E;
+vector<int> A[20001];
+int visited[20001];
+
+void run() {
+    cin >> V >> E;
+
+    for (int i = 0; i != E; ++i) {
+        int f, t;
+        cin >> f >> t;
+        A[f].push_back(t);
+        A[t].push_back(f);
+    }
+
+    deque<int> q;
+    int bi = 1;
+    visited[1] = bi++;
+    q.push_back(1);
+
+
+    while (!q.empty()) {
+        int cur = q.front();
+        q.pop_front();
+        for (auto n : A[cur]) {
+            if (visited[n]) {
+                if (visited[n] % 2 != bi %2) {
+                    cout << "NO" << el;
+                    return;
+                }
+                continue;
+            }
+            visited[n] = bi;
+            q.push_back(n);
+        }
+        ++bi;
+    }
+
+    cout << "YES" << el;
+}
 
 int main() {
     fastio
 
     int numTC;
     cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    while(numTC--) {
+        run();
     }
 
     return 0;

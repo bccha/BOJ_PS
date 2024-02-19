@@ -1,0 +1,8 @@
+g++ -O3 $1_*.cpp -o $1-
+
+if [ $? -eq 0 ];then
+    echo "compiled"
+    ./$1-
+else
+    echo "compile failed"
+fi
