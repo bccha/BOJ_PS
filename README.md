@@ -23,3 +23,7 @@ ABCDE
 https://www.acmicpc.net/problem/13023
 DFS 입력을 받을 때, adjacency matrix가 편하지만, sparse일때는 Adjacency list와 성능차이가 많이 날 수 있다.
 O(n^2) vs O(n+e)
+
+서울지하철2호선
+https://www.acmicpc.net/problem/16947
+DFS로 Cycle 및 Cycle에 속한 Node 찾는 방법
