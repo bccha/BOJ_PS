@@ -27,3 +27,7 @@ O(n^2) vs O(n+e)
 서울지하철2호선
 https://www.acmicpc.net/problem/16947
 DFS로 Cycle 및 Cycle에 속한 Node 찾는 방법
+
+
+0-1 BFS
+deque 사용 시 push_front 써서 우선순위를 높여라.
