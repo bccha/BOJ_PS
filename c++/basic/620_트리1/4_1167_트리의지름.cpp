@@ -288,19 +288,64 @@ struct BinaryTreeNode {
 template<typename T, size_t size>
 BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
+typedef BinaryTreeNode<int, 100000> Tree;
 #endif
 
+int V;
+vector<vector<pair<int, int>>> E;
+int visited[100'001];
+int maxLen = 0;
+
+int traverse(int n) {
+    int ret = 0;
+
+    if (E[n].size() == 0) {
+        return 0;
+    }
+
+    vector<int> l;
+    for (auto c : E[n]) {
+        if (visited[c.first]) {
+            continue;
+        }
+        visited[c.first] = 1;
+        l.push_back(c.second + traverse(c.first));
+    }
+    sort(l.begin(), l.end());
+    int dist = 0;
+    if (l.size() == 1) {
+        dist = l[0];
+    } if (l.size() > 1) {
+        dist = l[l.size() - 1] + l[l.size() - 2];
+    }
+    maxLen = max(maxLen, dist);
+    if (l.size() == 0) {
+        return 0;
+    }
+    return l[l.size() - 1];
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> V;
+    E.resize(V + 1);
+    for (int i = 0; i != V; ++i) {
+        int v, n, d;
+        cin >> v;
+        do {
+            cin >> n;
+            if (n == -1) {
+                break;;
+            }
+            cin >> d;
+            E[v].push_back({n, d});
+        } while (true);
     }
+
+    visited[1] = 1;
+    traverse(1);
+    cout << maxLen << endl;
 
     return 0;
 }

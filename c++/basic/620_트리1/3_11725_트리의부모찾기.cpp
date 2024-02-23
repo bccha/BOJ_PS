@@ -191,115 +191,39 @@ void bfs(int f) {
 }
 #endif
 
-#if 0
-template<typename T, size_t size>
-struct BinaryTreeNode {
-    T v;
-    int y;
-    int x;
-    bool root;
-    BinaryTreeNode *l;
-    BinaryTreeNode *r;
-    static BinaryTreeNode<T, size>* cache[size + 1];
+int N;
+vector<vector<int>> E;
+vector<int> visited;
 
-    BinaryTreeNode(T v) : v(v), l(nullptr), r(nullptr), y(0), x(0), root(true) {
-        cache[v] = this;
+void dfs(int cur) {
+    for (auto v : E[cur]) {
+        if (visited[v]) {
+            continue;
+        }
+        visited[v] = cur;
+        dfs(v);
     }
+}
 
-    ~BinaryTreeNode() {
-        if (l) {
-            delete l;
-        }
-        if (r) {
-            delete r;
-        }
-    }
-
-    BinaryTreeNode* addLeft(T v) {
-        BinaryTreeNode *l = cache[v];
-        if (l == nullptr) {
-            l = new BinaryTreeNode(v);
-        }
-        l->root = false;
-        this->l = l;
-        return l;
-    }
-
-    BinaryTreeNode* addRight(T v) {
-        BinaryTreeNode *r = cache[v];
-        if (r == nullptr) {
-            r = new BinaryTreeNode(v);
-        }
-        r->root = false;
-        this->r = r;
-        return r;
-    }
-
-    int calc(int h) {
-        static int xx = 0;
-        if (h == 0) {
-            xx = 1;
-        }
-        y = h;
-        int s = 0;
-        if (l) {
-            s = l->calc(h + 1);
-        }
-        x = xx++;
-
-        if (r) {
-            s += r->calc(h + 1);
-        }
-        return s + 1;
-    }
-
-#ifdef TREE_TRAVERSE
-    void preorder() {
-        cout << v;
-        if (l) {
-            l->preorder();
-        }
-        if (r) {
-            r->preorder();
-        }
-    }
-    void inorder() {
-        if (l) {
-            l->inorder();
-        }
-        cout << v;
-        if (r) {
-            r->inorder();
-        }
-    }
-    void postorder() {
-        if (l) {
-            l->postorder();
-        }
-        if (r) {
-            r->postorder();
-        }
-        cout << v;
-    }
-#endif
-
-};
-
-template<typename T, size_t size>
-BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
-
-#endif
 
 
 int main() {
-    fastio
+    cin >> N;
+    E.resize(N + 1);
+    visited.resize(N + 1, 0);
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
+    for (int i = 0; i != N - 1; ++i) {
+        int f, t;
+        cin >> f >> t;
+        E[f].push_back(t);
+        E[t].push_back(f);
+    }
 
-    while (numTC--) {
+    visited[1] = 1;
+    dfs(1);
 
+    for (int i = 2; i <= N; ++i) {
+        cout << visited[i] << el;
     }
 
     return 0;
