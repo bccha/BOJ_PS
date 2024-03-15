@@ -13,8 +13,9 @@ typedef unsigned int uint; // 0~약40억, int는 -20억~20억
 typedef long long llong;
 typedef unsigned long long ullong;
 
-#define FOR(I, C) for (int I = 0; I != C; ++I)
-#define FOR_1(I, C) for (int I = 1; I <= C; ++I)
+#define FOR(I, C) for (int I = 0; I != C; ++I) 
+#define FOR_1(I, C) for (int I = 1; I <= C; ++I) 
+#define FOR_2(I, F, T) for (int I = F; I != T; ++I)
 
 // 입력 / 출력
 #if 0
@@ -293,17 +294,193 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
+int N;
+int maxSum;
+int B[21][21];
+
+void print() {
+    FOR(i, N) {
+        FOR(j, N) {
+            printf("%5d", B[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void findMax() {
+    FOR(i, N) {
+        FOR(j, N) {
+            maxSum = max(maxSum, B[i][j]);
+        }
+    }
+}
+
+void moveUp() {
+    bool changed = false;
+    do {
+        changed = false;
+        FOR(i, N) {
+            FOR_2(j, 1, N) {
+                if (B[j][i] != 0 && B[j - 1][i] == 0) {
+                    B[j - 1][i] = B[j][i];
+                    B[j][i] = 0;
+                    changed = true;
+                }
+            }
+        }
+    } while (changed);
+}
+
+void moveDown() {
+    bool changed = false;
+    do {
+        changed = false;
+        FOR(i, N) {
+            for (int j = N - 2; j >= 0; --j) {
+                if (B[j][i] != 0 && B[j + 1][i] == 0) {
+                    B[j + 1][i] = B[j][i];
+                    B[j][i] = 0;
+                    changed = true;
+                }
+            }
+        }
+    } while (changed);
+}
+
+void moveLeft() {
+    bool changed = false;
+    do {
+        changed = false;
+        FOR(i, N) {
+            FOR_2(j, 1, N) {
+                if (B[i][j] != 0 && B[i][j - 1] == 0) {
+                    B[i][j - 1] = B[i][j];
+                    B[i][j] = 0;
+                    changed = true;
+                }
+            }
+        }
+    } while (changed);
+}
+
+void moveRight() {
+    bool changed = false;
+    do {
+        changed = false;
+        FOR(i, N) {
+            for (int j = N - 2; j >= 0; --j) {
+                if (B[i][j] != 0 && B[i][j + 1] == 0) {
+                    B[i][j + 1] = B[i][j];
+                    B[i][j] = 0;
+                    changed = true;
+                }
+            }
+        }
+    } while (changed);
+}
+
+
+void up() {
+    moveUp();
+    FOR(i, N) {
+        FOR (j, N - 1) {
+            if (B[j][i] == 0) {
+                continue;
+            }
+            if (B[j][i] == B[j + 1][i]) {
+                B[j][i] *= 2;
+                B[j + 1][i] = 0;
+            }
+        }
+    }
+    moveUp();
+}
+
+void down() {
+    moveDown();
+    FOR(i, N) {
+        for (int j = N - 2; j >= 0; --j) {
+            if (B[j][i] == 0) {
+                continue;
+            }
+            if (B[j][i] == B[j + 1][i]) {
+                B[j + 1][i] *= 2;
+                B[j][i] = 0;
+            }
+        }
+    }
+    moveDown();
+}
+
+void left() {
+    moveLeft();
+    FOR(i, N) {
+        FOR (j, N - 1) {
+            if (B[i][j] == 0) {
+                continue;
+            }
+            if (B[i][j] == B[i][j + 1]) {
+                B[i][j] *= 2;
+                B[i][j + 1] = 0;
+            }
+        }
+    }
+    moveLeft();
+}
+
+void right() {
+    moveRight();
+    FOR(i, N) {
+        for (int j = N - 2; j >= 0; --j) {
+            if (B[i][j] == 0) {
+                continue;
+            }
+            if (B[i][j] == B[i][j + 1]) {
+                B[i][j + 1] *= 2;
+                B[i][j] = 0;
+            }
+        }
+    }
+    moveRight();
+}
+
+
+
+void solve(int cur) {
+    if (cur == 5) {
+        findMax();
+        return;
+    }
+    int prevB[21][21];
+    memcpy(prevB, B, sizeof(B));
+
+    up();
+    solve(cur + 1);
+    memcpy(B, prevB, sizeof(B));
+    down();
+    solve(cur + 1);
+    memcpy(B, prevB, sizeof(B));
+    left();
+    solve(cur + 1);
+    memcpy(B, prevB, sizeof(B));
+    right();
+    solve(cur + 1);
+    memcpy(B, prevB, sizeof(B));
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> N;
+    FOR (i, N) {
+        FOR (j, N) {
+            cin >> B[i][j];
+        }
     }
+
+    solve(0);
+
+    cout << maxSum << endl;
 
     return 0;
 }

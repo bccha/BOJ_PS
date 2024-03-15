@@ -293,17 +293,72 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
+struct Stone {
+    int n[3];
+    Stone() {
+        n[0] = n[1] = n[2] = 0;
+    }
+
+    bool finished() {
+        return n[0] == n[1] && n[1] == n[2];
+    }
+};
+
+Stone S;
+
+// 메모리 초과 나는데, A + B + C는 언제나 같은 값이므로 2차원 배열로 해도 됨
+bool visited[2001][2001];
+
+void bfs() {
+    deque<Stone> q;
+    visited[S.n[0]][S.n[1]] = 1;
+    q.push_back(S);
+
+    while (!q.empty()) {
+        Stone cur = q.front();
+        q.pop_front();
+        if (cur.finished()) {
+            cout << 1 << endl;
+            exit(0);
+        }
+        for (int i = 0; i != 2; ++i) {
+            for (int j = i + 1; j != 3; ++j) {
+                if (cur.n[i] == cur.n[j]) {
+                    continue;
+                }
+                Stone next = cur;
+                int a = next.n[j] - next.n[i];
+                int b = next.n[i] * 2;
+                next.n[j] = a;
+                next.n[i] = b;
+                sort(next.n, next.n + 3);
+
+                if (next.n[0] > 1000 || next.n[1] > 1000 || next.n[2] > 1000) {
+                    continue;
+                }
+                if (next.n[0] < 1 || next.n[1] < 1 || next.n[2] < 1) {
+                    continue;
+                }
+                if (visited[next.n[0]][next.n[1]]) {
+                    continue;
+                }
+                visited[next.n[0]][next.n[1]] = 1;
+                q.push_back(next);
+            }
+        }
+    }
+    cout << 0 << endl;
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    FOR (i, 3) {
+        cin >> S.n[i];
     }
+
+    sort(S.n, S.n + 3);
+    bfs();
 
     return 0;
 }

@@ -293,6 +293,65 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
+int D(int v) {
+    return (v * 2) % 10000;
+}
+
+int S(int v) {
+    int ret = v - 1;
+    return ret < 0 ? 9999 : ret;
+}
+
+int L(int v) {
+    int m = v / 1000;
+    return (v - (m * 1000)) * 10 + m;
+}
+
+int R(int v) {
+    int l = v % 10;
+    return (v / 10) + l * 1000;
+}
+
+int visited[10000];
+char history[10000];
+
+typedef int (*Func)(int v);
+
+Func fn[4] = {D, S, L, R};
+char fn_c[4] = {'D', 'S', 'L', 'R'};
+
+void bfs(int f, int t) {
+    visited[f] = true;
+    deque<int> q;
+    q.push_back(f);
+
+    while (!q.empty()) {
+        int cur = q.front();
+        if (cur == t) {
+            break;
+        }
+        q.pop_front();
+        for (int i = 0; i != 4; ++i) {
+            int n = fn[i](cur);
+            if (visited[n] != -1) {
+                continue;
+            }
+            visited[n] = cur;
+            history[n] = fn_c[i];
+            q.push_back(n);
+        }
+    }
+    vector<char> h;
+    int back = t;
+    while (back != f) {
+        h.push_back(history[back]);
+        back = visited[back];
+    }
+    for (auto i = h.rbegin(); i != h.rend(); ++i) {
+        cout << *i;
+    }
+    cout << endl;
+}
 
 int main() {
     fastio
@@ -302,7 +361,11 @@ int main() {
     cin.ignore();
 
     while (numTC--) {
-
+        memset(visited, -1, sizeof(visited));
+        memset(history, 0, sizeof(history));
+        int f, t;
+        cin >> f >> t;
+        bfs(f, t);
     }
 
     return 0;

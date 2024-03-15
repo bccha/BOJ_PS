@@ -13,9 +13,6 @@ typedef unsigned int uint; // 0~약40억, int는 -20억~20억
 typedef long long llong;
 typedef unsigned long long ullong;
 
-#define FOR(I, C) for (int I = 0; I != C; ++I)
-#define FOR_1(I, C) for (int I = 1; I <= C; ++I)
-
 // 입력 / 출력
 #if 0
 void strToken(const string &in, vector<string> &ret) {
@@ -293,17 +290,279 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
+#define FOR(I, C) for (int I = 0; I != C; ++I) 
+#define FOR_1(I, C) for (int I = 1; I <= C; ++I) 
+
+typedef pair<int, int> coordi;
+
+int N, M;
+char board[12][12];
+
+coordi B, R, O;
+
+int left() {
+    coordi *C[2];
+    coordi nB = B, nR = R;
+    if (B.second < R.second) {
+        C[0] = &nB;
+        C[1] = &nR;
+    } else {
+        C[0] = &nR;
+        C[1] = &nB;
+    }
+
+    FOR(i, 2) {
+        while (true) {
+            coordi nC = *(C[i]);
+            nC.second--;
+            if (board[nC.first][nC.second] == '#') {
+                break;
+            }
+            if (nC == O) {
+                C[i]->second--;
+                break;
+            }
+            if (nC == nR || nC == nB) {
+                break;
+            }
+            C[i]->second--;
+        }
+    }
+
+    if (R == nR && B == nB) {
+        return -1;
+    }
+
+    if (nB == O) {
+        return -1;
+    }
+    if (nR == O ){
+        return 1;
+    }
+
+    R = nR;
+    B = nB;
+
+    return 0;
+}
+
+int right() {
+    coordi *C[2];
+    coordi nB = B, nR = R;
+    if (B.second > R.second) {
+        C[0] = &nB;
+        C[1] = &nR;
+    } else {
+        C[0] = &nR;
+        C[1] = &nB;
+    }
+
+    FOR(i, 2) {
+        while (true) {
+            coordi nC = *(C[i]);
+            nC.second++;
+            if (board[nC.first][nC.second] == '#') {
+                break;
+            }
+            if (nC == O) {
+                C[i]->second++;
+                break;
+            }
+            if (nC == nR || nC == nB) {
+                break;
+            }
+            C[i]->second++;
+        }
+    }
+
+    if (R == nR && B == nB) {
+        return -1;
+    }
+
+    if (nB == O) {
+        return -1;
+    }
+    if (nR == O ){
+        return 1;
+    }
+
+    R = nR;
+    B = nB;
+
+    return 0;
+}
+
+int up() {
+    coordi *C[2];
+    coordi nB = B, nR = R;
+    if (B.first < R.first) {
+        C[0] = &nB;
+        C[1] = &nR;
+    } else {
+        C[0] = &nR;
+        C[1] = &nB;
+    }
+
+    FOR(i, 2) {
+        while (true) {
+            coordi nC = *(C[i]);
+            nC.first--;
+            if (board[nC.first][nC.second] == '#') {
+                break;
+            }
+            if (nC == O) {
+                C[i]->first--;
+                break;
+            }
+            if (nC == nR || nC == nB) {
+                break;
+            }
+            C[i]->first--;
+        }
+    }
+
+    if (R == nR && B == nB) {
+        return -1;
+    }
+    if (nB == O) {
+        return -1;
+    }
+    if (nR == O ){
+        return 1;
+    }
+
+    R = nR;
+    B = nB;
+
+    return 0;
+}
+
+int down() {
+    coordi *C[2];
+    coordi nB = B, nR = R;
+    if (B.first > R.first) {
+        C[0] = &nB;
+        C[1] = &nR;
+    } else {
+        C[0] = &nR;
+        C[1] = &nB;
+    }
+
+    FOR(i, 2) {
+        while (true) {
+            coordi nC = *(C[i]);
+            nC.first++;
+            if (board[nC.first][nC.second] == '#') {
+                break;
+            }
+            if (nC == O) {
+                C[i]->first++;
+                break;
+            }
+            if (nC == nR || nC == nB) {
+                break;
+            }
+            C[i]->first++;
+        }
+    }
+
+    if (R == nR && B == nB) {
+        return -1;
+    }
+    if (nB == O) {
+        return -1;
+    }
+    if (nR == O ){
+        return 1;
+    }
+
+    R = nR;
+    B = nB;
+
+    return 0;
+}
+
+int solve(int cur) {
+    if (R == O) {
+        return cur;
+    }
+
+    if (cur >= 10) {
+        return 987654321;
+    }
+
+    coordi origR = R, origB = B;
+
+    int ret = 987654321;
+
+    int l = left();
+    if (l == 0) {
+        ret = min(ret, solve(cur + 1));
+    } else if (l == 1) {
+        return cur + 1;
+    }
+    R = origR;
+    B = origB;
+
+    l = right();
+    if (l == 0) {
+        ret = min(ret, solve(cur + 1));
+    } else if (l == 1) {
+        return cur + 1;
+    }
+    R = origR;
+    B = origB;
+
+    l = up();
+    if (l == 0) {
+        ret = min(ret, solve(cur + 1));
+    } else if (l == 1) {
+        return cur + 1;
+    }
+    R = origR;
+    B = origB;
+
+    l = down();
+    if (l == 0) {
+        ret = min(ret, solve(cur + 1));
+    } else if (l == 1) {
+        return cur + 1;
+    }
+    R = origR;
+    B = origB;
+
+    return ret;
+}
+
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> N >> M;
+    FOR (i, N) {
+        cin >> board[i];
+        FOR (j, M) {
+            if (board[i][j] == 'B') {
+                B = {i, j};
+                board[i][j] = '.';
+            }
+            if (board[i][j] == 'R') {
+                R = {i, j};
+                board[i][j] = '.';
+            }
+            if (board[i][j] == 'O') {
+                O = {i, j};
+                board[i][j] = '.';
+            }
+        }
     }
+
+    int ret = solve(0);
+    if (ret == 987654321) {
+        ret = -1;
+    }
+    
+    cout << ret << endl;
 
     return 0;
 }

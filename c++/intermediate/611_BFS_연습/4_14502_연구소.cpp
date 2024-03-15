@@ -293,17 +293,98 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
+int N, M;
+int B[9][9];
+
+int V, S;
+vector<pair<int, int>> virus;
+vector<pair<int, int>> space;
+
+int safe = 0;
+
+
+int dyx[4][2] = {
+    {-1, 0}, {1, 0}, {0, -1}, {0, 1}
+};
+
+void bfs() {
+    int visited[9][9];
+    memset(visited, 0, sizeof(visited));
+    deque<pair<int, int>> q;
+
+    int cnt = 0;
+
+    for (auto v : virus) {
+        visited[v.first][v.second] = 1;
+        q.push_back(v);
+    }
+
+    while (!q.empty()) {
+        auto cur = q.front();
+        q.pop_front();
+        ++cnt;
+        FOR (i, 4) {
+            int ny = cur.first + dyx[i][0];
+            int nx = cur.second + dyx[i][1];
+            if (ny < 0 || ny >= N || nx < 0 || nx >= M) {
+                continue;
+            }
+            if (visited[ny][nx]) {
+                continue;
+            }
+            if (B[ny][nx] == 1) {
+                continue;
+            }
+            visited[ny][nx] = 1;
+            q.push_back({ny, nx});
+        }
+    }
+    safe = max(safe, (S - 3) + V - cnt);
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> N >> M;
+    FOR (i, N) {
+        FOR (j, M) {
+            cin >> B[i][j];
+            if (B[i][j] == 0) {
+                space.push_back({i, j});
+                ++S;
+            }
+            if (B[i][j] == 2) {
+                virus.push_back({i, j});
+                ++V;
+            }
+        }
     }
+
+    vector<int> combi(S);
+    for (int i = S - 3; i != S; ++i) {
+        combi[i] = 1;
+    }
+
+    do {
+        vector<pair<int, int>> wall;
+        FOR (i, S) {
+            if (combi[i]) {
+                wall.push_back(space[i]);
+            }
+        }
+        for (auto v : wall) {
+            B[v.first][v.second] = 1;
+        }
+
+        bfs();
+
+        for (auto v : wall) {
+            B[v.first][v.second] = 0;
+        }
+        
+    } while (next_permutation(combi.begin(), combi.end()));
+
+    cout << safe << endl;
 
     return 0;
 }

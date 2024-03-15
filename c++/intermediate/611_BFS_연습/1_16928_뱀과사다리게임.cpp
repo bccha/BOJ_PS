@@ -293,17 +293,59 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
+int U, D;
+int up[101];
+int down[101];
+int visited[101];
+
+void bfs(int f) {
+    deque<pair<int, int>> q;
+    visited[f] = 1;
+    q.push_back({f, 0});
+
+    while (!q.empty()) {
+        pair<int, int> cur = q.front();
+        if (cur.first == 100) {
+            cout << cur.second << endl;
+            break;
+        }
+        q.pop_front();
+        for (int i = 1; i <= 6; ++i) {
+            int nx = cur.first + i;
+            if (nx > 100) {
+                continue;
+            }
+            if (up[nx]) {
+                nx = up[nx];
+            }
+            if (down[nx]) {
+                nx = down[nx];
+            }
+            if (visited[nx]) {
+                continue;
+            }
+            visited[nx] = 1;
+            q.push_back({nx, cur.second + 1});
+        }
+    }
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> U >> D;
+    FOR (i, U) {
+        int f, t;
+        cin >> f >> t;
+        up[f] = t;
     }
+    FOR (i, D) {
+        int f, t;
+        cin >> f >> t;
+        down[f] = t;
+    }
+
+    bfs(1);
 
     return 0;
 }
