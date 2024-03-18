@@ -85,33 +85,6 @@ inline int getLCM(int a, int b) {
     return a * b / gcd;
 }
 
-// 에라스토테네스의 체
-// 반드시 return 받은 pointer를 delete 해주어야 한다.
-//    auto *ps = getSieve<1000000>();
-//    auto &sieve = *ps;
-//    delete ps;
-template<int maxVal>
-inline bitset<maxVal + 1>* getSieve() {
-    auto *ret = new bitset<maxVal + 1>();
-    auto &r = *ret;
-
-    r[0] = true;
-    r[1] = true;
-
-    for (int i = 2; i * i <= maxVal; ++i) {
-        if (r[i]) {
-            continue;
-        }
-        int j = i * i;
-        while (j <= maxVal) {
-            r[j] = true;
-            j += i;
-        }
-    }
-
-    return ret;
-}
-
 template <typename T>
 inline T factorial(T n) {
     T ret = T(1);
@@ -318,16 +291,89 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
+// 에라스토테네스의 체
+// 반드시 return 받은 pointer를 delete 해주어야 한다.
+//    auto *ps = getSieve<1000000>();
+//    auto &sieve = *ps;
+//    delete ps;
+template<int maxVal>
+inline bitset<maxVal + 1>* getSieve() {
+    auto *ret = new bitset<maxVal + 1>();
+    auto &r = *ret;
+
+    r[0] = true;
+    r[1] = true;
+
+    for (int i = 2; i * i <= maxVal; ++i) {
+        if (r[i]) {
+            continue;
+        }
+        int j = i * i;
+        while (j <= maxVal) {
+            r[j] = true;
+            j += i;
+        }
+    }
+
+    return ret;
+}
+
+
+int F, T;
+
+int visited[10000];
+
+void bfs() {
+    deque<int> q;
+    visited[F] = 1;
+    q.push_back(F);
+    char str[10];
+
+    auto *ps = getSieve<10000>();
+    auto &sieve = *ps;
+
+    while (!q.empty()) {
+        int cur = q.front();
+        q.pop_front();
+        if (cur == T) {
+            delete ps;
+            cout << visited[cur] - 1<< endl;
+            return;
+        }
+        For(i, 4) {
+            snprintf(str, 5, "%04d", cur);
+            For (j, 10) {
+                str[i] = '0' + j;
+                int nx = atoi(str);
+                if (nx < 1000 || nx > 9999) {
+                    continue;
+                }
+                if (visited[nx]) {
+                    continue;
+                }
+                if (sieve[nx]) {
+                    continue;
+                }
+                visited[nx] = visited[cur] + 1;
+                //cout << cur << " --> " << nx << ":" << visited[cur] << "," << visited[nx] << endl;
+                q.push_back(nx);
+            }
+        }
+    }
+    delete ps;
+    cout << "Impossible" << endl;
+}
 
 int main() {
     fastio
 
+
     int numTC;
     cin >> numTC;
-    cin.ignore();
-
     while (numTC--) {
-
+        cin >> F >> T;
+        memset(visited, 0, sizeof(visited));
+        bfs();
     }
 
     return 0;

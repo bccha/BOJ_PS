@@ -16,31 +16,6 @@ typedef unsigned long long ullong;
 #define FOR(I, C) for (int I = 0; I != C; ++I)
 #define FOR_1(I, C) for (int I = 1; I <= C; ++I)
 
-#define For FOR
-#define For1 FOR_1
-
-int d4yx[4][2] = {
-    {-1, 0}, {0, -1}, {1, 0}, {0, 1}
-};
-
-int d8yx[8][2] = {
-    {-1, 0}, {1, 0}, {0, -1}, {0, 1},
-    {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
-};
-
-#define Pii pair<int, int>
-#define fi first
-#define se second
-
-#define Tuple make_tuple
-
-#if 0
-// pack
-auto A = Tuple(1, 2, 3);
-// unpack
-auto [aa, bb, cc] = A;
-#endif
-
 // 입력 / 출력
 #if 0
 void strToken(const string &in, vector<string> &ret) {
@@ -318,17 +293,64 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
+#define fi first
+#define se second
+#define Pii pair<int, int>
+
+int N, M, K;
+string B[1001];
+
+int visited[2][11][1001][1001];
+
+int dyx[5][2] = {
+    {0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}
+};
+
+void bfs() {
+    deque<pair<Pii, Pii>> q;
+    visited[0][0][0][0] = 1;
+    q.push_back({{0, 0}, {0, 0}});
+
+    while (!q.empty()) {
+        auto cur = q.front();
+        if (cur.fi.fi== N - 1 && cur.fi.se== M - 1) {
+            cout << visited[cur.se.fi][cur.se.se][cur.fi.fi][cur.fi.se] << endl;
+            return;
+        }
+        q.pop_front();
+        FOR (i, 5) {
+            int ny = cur.fi.fi + dyx[i][0];
+            int nx = cur.fi.se + dyx[i][1];
+
+            if (ny < 0 || ny >= N || nx < 0 || nx >= M) {
+                continue;
+            }
+
+            int day = 1 - cur.se.fi;
+            int k = cur.se.se;
+            if (visited[day][k][ny][nx] == 0 && ((ny == cur.fi.fi && nx == cur.fi.se && B[ny][nx] == '1') || B[ny][nx] != '1')) {
+                visited[day][k][ny][nx] = visited[cur.se.fi][cur.se.se][cur.fi.fi][cur.fi.se] + 1;
+                q.push_back({{ny, nx}, {day, k}});
+            }
+
+            if (cur.se.fi == 0 && k < K && visited[day][k + 1][ny][nx] == 0 && B[ny][nx] == '1') {
+                visited[day][k + 1][ny][nx] = visited[cur.se.fi][cur.se.se][cur.fi.fi][cur.fi.se] + 1;
+                q.push_back({{ny, nx}, {day, k + 1}});
+            }
+        }
+    }
+    cout << -1 << endl;
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> N >> M >> K;
+    FOR (i, N) {
+        cin >> B[i];
     }
+
+    bfs();
 
     return 0;
 }

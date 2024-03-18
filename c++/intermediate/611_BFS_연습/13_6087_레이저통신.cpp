@@ -20,7 +20,7 @@ typedef unsigned long long ullong;
 #define For1 FOR_1
 
 int d4yx[4][2] = {
-    {-1, 0}, {0, -1}, {1, 0}, {0, 1}
+    {-1, 0}, {1, 0}, {0, -1}, {0, 1}
 };
 
 int d8yx[8][2] = {
@@ -318,17 +318,75 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
+int W, H;
+string B[101];
+Pii C[2];
+
+int visited[4][4][101][101];
+
+void bfs() {
+    priority_queue<tuple<int, int, int, int>> q;
+    For (i, 4) {
+        q.push(Tuple(0, -C[0].fi, -C[0].se, -i)); // mirror, length, y, x, direction
+        visited[0][i][C[0].fi][C[0].se];
+    }
+
+    while (!q.empty()) {
+        auto cur = q.top();
+        auto [m, y, x, dir] = cur;
+        m *= -1;
+        y *= -1;
+        x *= -1;
+        dir *= -1;
+        q.pop();
+
+        //cout << m << ", {" << y << "," << x << "}, " << dir << endl;
+
+        if (y == C[1].fi && x == C[1].se) {
+            cout << m << endl;
+            break;
+        }
+
+        For(i, 4) {
+            int ny = y + d4yx[i][0];
+            int nx = x + d4yx[i][1];
+
+            if (ny < 0 || ny >= H || nx < 0 || nx >= W) {
+                continue;
+            }
+
+            if (B[ny][nx] == '*') {
+                continue;
+            }
+
+            if (visited[dir][i][ny][nx]) {
+                continue;
+            }
+
+            visited[dir][i][ny][nx] = 1;
+
+            int nm = (i == dir) ? m : m + 1;
+
+            q.push(Tuple(-nm, -ny, -nx, -i));
+        }
+    }
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    int c = 0;
+    cin >> W >> H;
+    For(i, H) {
+        cin >> B[i];
+        For(j, W) {
+            if (B[i][j] == 'C') {
+                C[c++] = {i, j};
+            }
+        }
     }
+
+    bfs();
 
     return 0;
 }
