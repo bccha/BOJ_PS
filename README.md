@@ -33,3 +33,7 @@ DFS로 Cycle 및 Cycle에 속한 Node 찾는 방법
 deque 사용 시 push_front 써서 우선순위를 높여라.
 
 합이 같은 경우에는 search space를 줄일 수 있고, visited 메모리 공간도 줄일 수 있다.
+
+
+전구와 스위치 -> 그리디하게 생각하는 방법.
+처음값을 고정하는 방법. RGB거리 2와 비슷
