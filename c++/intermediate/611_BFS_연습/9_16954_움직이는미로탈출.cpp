@@ -15,33 +15,9 @@ typedef unsigned long long ullong;
 
 #define FOR(I, C) for (int I = 0; I != C; ++I)
 #define FOR_1(I, C) for (int I = 1; I <= C; ++I)
-
-#define For FOR
-#define For1 FOR_1
-
-#if 0
-int d4yx[4][2] = {
-    {-1, 0}, {1, 0}, {0, -1}, {0, 1}
-};
-
-int d8yx[4][2] = {
-    {-1, 0}, {1, 0}, {0, -1}, {0, 1}
-    {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
-};
-#endif
-
-#define Pii pair<int, int>
 #define fi first
 #define se second
-
-#define Tuple make_tuple
-
-#if 0
-// pack
-auto A = Tuple(1, 2, 3);
-// unpack
-auto [aa, bb, cc] = A;
-#endif
+#define pii pair<int, int>
 
 // 입력 / 출력
 #if 0
@@ -320,17 +296,69 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
+const int N = 8;
+string B[N + 2][N];
+int dyx[9][2] = {
+    {1, -1}, {1, 0}, {1, 1}, {0, -1}, {0, 1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 0}
+};
+
+bool visited[N + 1][N + 1];
+
+void bfs() {
+    deque<pair<pii, int>> q;
+    visited[N - 1][0] = true;
+    q.push_back({{N - 1, 0}, 0});
+
+
+    while (!q.empty()) {
+        auto cur = q.front();
+        q.pop_front();
+        if (cur.fi.fi == 0) {
+            cout << 1 << endl;
+            exit(0);
+        }
+        for (auto d : dyx) {
+            int dy = cur.fi.fi + d[0];
+            int dx = cur.fi.se + d[1];
+            if (dy < 0 || dy >= N || dx < 0 || dx >= N) {
+                continue;
+            }
+            if (!(d[0] == 0 && d[1] == 0)) {
+                if (visited[dy][dx]) {
+                    continue;
+                }
+            }
+            if (B[cur.se][dy][dx] == '#') {
+                continue;
+            }
+            int nextB = min(N, cur.se + 1);
+            if (B[nextB][dy][dx] == '#') {
+                continue;
+            }
+            visited[dy][dx] = 1;
+            q.push_back({{dy, dx}, nextB});
+        }
+    }
+    cout << 0 << endl;
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    FOR (i, N) {
+        cin >> B[0][i];
     }
+
+    for (int i = 1; i <= N; ++i) {
+        for (int j = 0; j != i; ++j) {
+            B[i][j] = "........";
+        }
+        for (int j = i; j < N; ++j) {
+            B[i][j] = B[0][j - i];
+        }
+    }
+
+    bfs();
 
     return 0;
 }

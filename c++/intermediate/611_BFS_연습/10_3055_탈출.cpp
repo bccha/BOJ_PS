@@ -19,30 +19,6 @@ typedef unsigned long long ullong;
 #define For FOR
 #define For1 FOR_1
 
-#if 0
-int d4yx[4][2] = {
-    {-1, 0}, {1, 0}, {0, -1}, {0, 1}
-};
-
-int d8yx[4][2] = {
-    {-1, 0}, {1, 0}, {0, -1}, {0, 1}
-    {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
-};
-#endif
-
-#define Pii pair<int, int>
-#define fi first
-#define se second
-
-#define Tuple make_tuple
-
-#if 0
-// pack
-auto A = Tuple(1, 2, 3);
-// unpack
-auto [aa, bb, cc] = A;
-#endif
-
 // 입력 / 출력
 #if 0
 void strToken(const string &in, vector<string> &ret) {
@@ -317,20 +293,87 @@ struct BinaryTreeNode {
 
 template<typename T, size_t size>
 BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
-
 #endif
 
+int dyx[4][2] = {
+    {-1, 0}, {1, 0}, {0, -1}, {0, 1}
+};
+
+#define Pii pair<int, int>
+#define yy(A) A.first
+#define xx(A) A.second
+
+int R, C;
+char B[51][51];
+Pii D, S;
+vector<Pii> W;
+int visited[51][51];
+
+void bfs() {
+    deque<pair<Pii, int>> q;
+    for (auto w : W) {
+        visited[yy(w)][xx(w)] = 1;
+        q.push_back({w, 2});
+    }
+    visited[yy(S)][xx(S)] = 1;
+    q.push_back({S, 1});
+
+    while (!q.empty()) {
+        auto cur = q.front();
+        q.pop_front();
+        if (cur.first == D && cur.second == 1) {
+            cout << visited[yy(cur.first)][xx(cur.first)] - 1<< endl;
+            return;
+        }
+        for (auto d : dyx) {
+            int ny = yy(cur.first) + d[0];
+            int nx = xx(cur.first) + d[1];
+            if (ny < 0 || ny >= R || nx < 0 || nx >= C) {
+                continue;
+            }
+            if (B[ny][nx] == 'X') {
+                continue;
+            }
+            if (cur.second == 1 && visited[ny][nx]) {
+                continue;
+            }
+            if (cur.second == 2 && B[ny][nx] == 'D') {
+                continue;
+            }
+            if (B[ny][nx] == '*') {
+                continue;
+            }
+            if (cur.second == 1) {
+                visited[ny][nx] = visited[yy(cur.first)][xx(cur.first)] + 1;
+            }
+            if (cur.second == 2) {
+                B[ny][nx] = '*';
+            }
+            q.push_back({{ny, nx}, cur.second});
+        }
+    }
+    cout << "KAKTUS" << el;
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> R >> C;
+    For (i, R) {
+        cin >> B[i];
+        For (j, C) {
+            if (B[i][j] == 'D') {
+                D = {i, j};
+            }
+            if (B[i][j] == 'S') {
+                S = {i, j};
+            }
+            if (B[i][j] == '*') {
+                W.push_back({i, j});
+            }
+        }
     }
+    bfs();
 
     return 0;
 }

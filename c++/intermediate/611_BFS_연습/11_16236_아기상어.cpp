@@ -19,29 +19,19 @@ typedef unsigned long long ullong;
 #define For FOR
 #define For1 FOR_1
 
-#if 0
 int d4yx[4][2] = {
-    {-1, 0}, {1, 0}, {0, -1}, {0, 1}
+    {-1, 0}, {0, -1}, {1, 0}, {0, 1}
 };
 
-int d8yx[4][2] = {
-    {-1, 0}, {1, 0}, {0, -1}, {0, 1}
+int d8yx[8][2] = {
+    {-1, 0}, {1, 0}, {0, -1}, {0, 1},
     {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
 };
-#endif
 
 #define Pii pair<int, int>
 #define fi first
 #define se second
 
-#define Tuple make_tuple
-
-#if 0
-// pack
-auto A = Tuple(1, 2, 3);
-// unpack
-auto [aa, bb, cc] = A;
-#endif
 
 // 입력 / 출력
 #if 0
@@ -320,17 +310,109 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
+int N;
+int B[21][21];
+Pii S;
+int Size = 2;
+int visited[21][21];
+int ate = 0;
+
+int bfs(Pii t) {
+    deque<Pii> q;
+    memset(visited, 0, sizeof(visited));
+    q.push_back(S);
+    visited[S.fi][S.se] = 1;
+
+    while (!q.empty()) {
+        auto cur = q.front();
+        q.pop_front();
+        if (cur == t) {
+            return visited[cur.fi][cur.se] - 1;
+        }
+        for (auto d : d4yx) {
+            int dy = cur.fi + d[0];
+            int dx = cur.se + d[1];
+            if (dy < 0 || dy >= N || dx < 0 || dx >= N) {
+                continue;
+            }
+            if (B[dy][dx] > Size) {
+                continue;
+            }
+            if (visited[dy][dx]) {
+                continue;
+            }
+            visited[dy][dx] = visited[cur.fi][cur.se] + 1;
+            q.push_back({dy, dx});
+        }
+    }
+    return -1;
+}
+
+int getNext() {
+    vector<Pii> candi;
+    For(i, N) {
+        For(j, N) {
+            if (B[i][j] > 0 && B[i][j] < Size) {
+                candi.push_back({i, j});
+            }
+        }
+    }
+
+    if (candi.size() == 0) {
+        return 0;
+    }
+
+    vector<pair<int, Pii>> passed;
+    for (auto c : candi) {
+        int dist = bfs(c);
+        if (dist < 0) {
+            continue;
+        }
+        passed.push_back({dist, c}); 
+    }
+    if (passed.size() == 0) {
+        return 0;
+    }
+    sort(passed.begin(), passed.end());
+
+    B[passed[0].se.fi][passed[0].se.se] = 0;
+    S = passed[0].se;
+
+    //cout << passed[0].fi << "," << passed[0].se.fi << "," << passed[0].se.se << endl;
+
+    ++ate;
+    if (Size == ate) {
+        ++Size;
+        ate = 0;
+    }
+
+    return passed[0].fi;
+}
 
 int main() {
     fastio
 
-    int numTC;
-    cin >> numTC;
-    cin.ignore();
-
-    while (numTC--) {
-
+    cin >> N;
+    For(i, N) {
+        For(j, N) {
+            cin >> B[i][j];
+            if (B[i][j] == 9) {
+                S = {i, j};
+                B[i][j] = 0;
+            }
+        }
     }
+
+    int time = 0;
+    while(true) {
+        int ret = getNext();
+        if (ret == 0) {
+            break;
+        }
+        time += ret;
+    }
+
+    cout << time << endl;
 
     return 0;
 }
