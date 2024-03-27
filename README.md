@@ -19,7 +19,7 @@
     https://rimkongs.tistory.com/212
     next_permutation 구현 방법 알고, 이를 응용하기
 
-** RGB 거리 2
+* RGB 거리 2
 
     https://www.acmicpc.net/problem/17404
     처음 값을 고정하는 방법
@@ -47,3 +47,6 @@
     
     처음값을 고정하는 방법. RGB거리 2와 비슷
     https://burningjeong.tistory.com/409
+
+* LIS 2
+    lower_bound를 이용하는 greedy 이해.
