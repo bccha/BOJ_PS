@@ -320,147 +320,53 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
-int d;
-string id;
-llong x, y;
+char B[6562][6562];
 
-bool left(int idx) {
-    if (idx >= d || idx < 0) {
-        return false;
-    }
+int N;
 
-    if (id[idx] == '1') {
-        id[idx] = '2';
-        return true;
+
+void print(int n) {
+    For (i, n) {
+        cout << B[i] << endl;
     }
-    if (id[idx] == '2') {
-        id[idx] = '1';
-        return left(idx - 1);
-    }
-    if (id[idx] == '3') {
-        id[idx] = '4';
-        return left(idx - 1);
-    }
-    if (id[idx] == '4') {
-        id[idx] = '3';
-        return true;
-    }
-    return false;
 }
 
-bool right(int idx) {
-    if (idx >= d || idx < 0) {
-        return false;
+void drawSpace(int n, int y, int x) {
+    For (i, n) {
+        For (j, n) {
+            B[y + i][x + j] = ' ';
+        }
     }
-
-    if (id[idx] == '1') {
-        id[idx] = '2';
-        return right(idx - 1);
-    }
-    if (id[idx] == '2') {
-        id[idx] = '1';
-        return true;
-    }
-    if (id[idx] == '3') {
-        id[idx] = '4';
-        return true;
-    }
-    if (id[idx] == '4') {
-        id[idx] = '3';
-        return right(idx - 1);
-    }
-    return false;
 }
 
-bool up(int idx) {
-    if (idx >= d || idx < 0) {
-        return false;
-    }
 
-    if (id[idx] == '1') {
-        id[idx] = '4';
-        return up(idx - 1);
+void drawStar(int n, int y, int x) {
+    if (n == 1) {
+        B[y][x] = '*';
+        return;
     }
-    if (id[idx] == '2') {
-        id[idx] = '3';
-        return up(idx - 1);
-    }
-    if (id[idx] == '3') {
-        id[idx] = '2';
-        return true;
-    }
-    if (id[idx] == '4') {
-        id[idx] = '1';
-        return true;
-    }
-    return false;
+    int nx = n / 3;
+    drawStar(nx, y, x);
+    drawStar(nx, y, x + nx);
+    drawStar(nx, y, x + 2 * nx);
+
+    drawStar(nx, y + nx, x);
+    drawSpace(nx, y + nx, x + nx);
+    drawStar(nx, y + nx, x + 2 * nx);
+
+    drawStar(nx, y + 2 * nx, x);
+    drawStar(nx, y + 2 * nx, x + nx);
+    drawStar(nx, y + 2 * nx, x + 2 * nx);
 }
 
-bool down(int idx) {
-    if (idx >= d || idx < 0) {
-        return false;
-    }
-
-    if (id[idx] == '1') {
-        id[idx] = '4';
-        return true;
-    }
-    if (id[idx] == '2') {
-        id[idx] = '3';
-        return true;
-    }
-    if (id[idx] == '3') {
-        id[idx] = '2';
-        return down(idx - 1);
-    }
-    if (id[idx] == '4') {
-        id[idx] = '1';
-        return down(idx - 1);
-    }
-    return false;
-}
-
-bool (*h)(int idx) = left;
-bool (*v)(int idx) = up;
 
 int main() {
     fastio
 
-    cin >> d >> id;
-    cin >> x >> y;
+    cin >> N;
 
-    int sX = x < 0 ? -1 : 1;
-    int sY = y < 0 ? -1 : 1;
+    drawStar(N, 0, 0);
+    print(N);
 
-    h = (x < 0) ? ::left : ::right;
-    v = (y < 0) ? ::down : ::up;
-
-    x = x < 0 ? -x : x;
-    y = y < 0 ? -y : y;
-
-    for (llong i = 49; i >= 0; --i) {
-        if (x & (1ll << i)) {
-            if (i > (d - 1)) {
-                cout << -1 << endl;
-                exit(0);
-            }
-            if (!h((d - 1) - i)) {
-                cout << -1 << endl;
-                exit(0);
-            }
-        }
-    }
-    for (llong i = 49; i >= 0; --i) {
-        if (y & (1ll << i)) {
-            if (i > (d - 1)) {
-                cout << -1 << endl;
-                exit(0);
-            }
-            if (!v((d - 1) - i)) {
-                cout << -1 << endl;
-                exit(0);
-            }
-        }
-    }
-    cout << id << endl;
+    return 0;
 }

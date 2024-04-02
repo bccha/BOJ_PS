@@ -320,147 +320,69 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
-int d;
-string id;
-llong x, y;
+int N;
+int A[500'000];
+int S[500'000];
+ullong cnt = 0;
 
-bool left(int idx) {
-    if (idx >= d || idx < 0) {
-        return false;
+void merge_sort(int b, int e) {
+    if (b >= e) {
+        return;
     }
+    if (b == e - 1) {
+        S[b] = A[b];
+        return;
+    }
+    int m = (b + e) / 2;
+    merge_sort(b, m);
+    merge_sort(m, e);
+    int l = b;
+    int r = m;
 
-    if (id[idx] == '1') {
-        id[idx] = '2';
-        return true;
+    int idx = b;
+    while (!(l == m && r == e)) {
+        if (l == m) {
+            S[idx++] = A[r];
+            ++r;
+            continue;
+        }
+        if (r == e) {
+            S[idx++] = A[l];
+            ++l;
+            continue;
+        }
+        if (A[l] <= A[r]) {
+            S[idx++] = A[l];
+            ++l;
+            continue;
+        }
+        if (A[l] > A[r]) {
+            cnt += m - l;
+            S[idx++] = A[r];
+            ++r;
+            continue;
+        }
     }
-    if (id[idx] == '2') {
-        id[idx] = '1';
-        return left(idx - 1);
-    }
-    if (id[idx] == '3') {
-        id[idx] = '4';
-        return left(idx - 1);
-    }
-    if (id[idx] == '4') {
-        id[idx] = '3';
-        return true;
-    }
-    return false;
+    memcpy(A + b, S + b, sizeof(int) * (e - b));
 }
-
-bool right(int idx) {
-    if (idx >= d || idx < 0) {
-        return false;
-    }
-
-    if (id[idx] == '1') {
-        id[idx] = '2';
-        return right(idx - 1);
-    }
-    if (id[idx] == '2') {
-        id[idx] = '1';
-        return true;
-    }
-    if (id[idx] == '3') {
-        id[idx] = '4';
-        return true;
-    }
-    if (id[idx] == '4') {
-        id[idx] = '3';
-        return right(idx - 1);
-    }
-    return false;
-}
-
-bool up(int idx) {
-    if (idx >= d || idx < 0) {
-        return false;
-    }
-
-    if (id[idx] == '1') {
-        id[idx] = '4';
-        return up(idx - 1);
-    }
-    if (id[idx] == '2') {
-        id[idx] = '3';
-        return up(idx - 1);
-    }
-    if (id[idx] == '3') {
-        id[idx] = '2';
-        return true;
-    }
-    if (id[idx] == '4') {
-        id[idx] = '1';
-        return true;
-    }
-    return false;
-}
-
-bool down(int idx) {
-    if (idx >= d || idx < 0) {
-        return false;
-    }
-
-    if (id[idx] == '1') {
-        id[idx] = '4';
-        return true;
-    }
-    if (id[idx] == '2') {
-        id[idx] = '3';
-        return true;
-    }
-    if (id[idx] == '3') {
-        id[idx] = '2';
-        return down(idx - 1);
-    }
-    if (id[idx] == '4') {
-        id[idx] = '1';
-        return down(idx - 1);
-    }
-    return false;
-}
-
-bool (*h)(int idx) = left;
-bool (*v)(int idx) = up;
 
 int main() {
     fastio
 
-    cin >> d >> id;
-    cin >> x >> y;
-
-    int sX = x < 0 ? -1 : 1;
-    int sY = y < 0 ? -1 : 1;
-
-    h = (x < 0) ? ::left : ::right;
-    v = (y < 0) ? ::down : ::up;
-
-    x = x < 0 ? -x : x;
-    y = y < 0 ? -y : y;
-
-    for (llong i = 49; i >= 0; --i) {
-        if (x & (1ll << i)) {
-            if (i > (d - 1)) {
-                cout << -1 << endl;
-                exit(0);
-            }
-            if (!h((d - 1) - i)) {
-                cout << -1 << endl;
-                exit(0);
-            }
-        }
+    cin >> N;
+    For (i, N) {
+        cin >> A[i];
     }
-    for (llong i = 49; i >= 0; --i) {
-        if (y & (1ll << i)) {
-            if (i > (d - 1)) {
-                cout << -1 << endl;
-                exit(0);
-            }
-            if (!v((d - 1) - i)) {
-                cout << -1 << endl;
-                exit(0);
-            }
-        }
+
+    merge_sort(0, N);
+
+    /*
+    For (i, N) {
+        cout << A[i] << endl;
     }
-    cout << id << endl;
+    */
+
+    cout << cnt << endl;
+
+    return 0;
 }

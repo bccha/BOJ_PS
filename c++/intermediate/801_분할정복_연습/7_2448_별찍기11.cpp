@@ -320,147 +320,43 @@ BinaryTreeNode<T, size>* BinaryTreeNode<T, size>::cache[size + 1];
 
 #endif
 
-int d;
-string id;
-llong x, y;
+int N;
 
-bool left(int idx) {
-    if (idx >= d || idx < 0) {
-        return false;
-    }
+char B[3073][3072 * 2 + 1];
 
-    if (id[idx] == '1') {
-        id[idx] = '2';
-        return true;
+void tri(int y, int x, int n) {
+    if (n == 3) {
+        B[y][x + 2] = '*';
+        B[y + 1][x + 1] = '*';
+        B[y + 1][x + 3] = '*';
+
+        For (i, 5) {
+            B[y + 2][x + i] = '*';
+        }
+        return;
     }
-    if (id[idx] == '2') {
-        id[idx] = '1';
-        return left(idx - 1);
-    }
-    if (id[idx] == '3') {
-        id[idx] = '4';
-        return left(idx - 1);
-    }
-    if (id[idx] == '4') {
-        id[idx] = '3';
-        return true;
-    }
-    return false;
+    int nn = n / 2;
+    tri(y, x + nn, nn);
+    tri(y + nn, x, nn);
+    tri(y + nn, x + n, nn);
 }
-
-bool right(int idx) {
-    if (idx >= d || idx < 0) {
-        return false;
-    }
-
-    if (id[idx] == '1') {
-        id[idx] = '2';
-        return right(idx - 1);
-    }
-    if (id[idx] == '2') {
-        id[idx] = '1';
-        return true;
-    }
-    if (id[idx] == '3') {
-        id[idx] = '4';
-        return true;
-    }
-    if (id[idx] == '4') {
-        id[idx] = '3';
-        return right(idx - 1);
-    }
-    return false;
-}
-
-bool up(int idx) {
-    if (idx >= d || idx < 0) {
-        return false;
-    }
-
-    if (id[idx] == '1') {
-        id[idx] = '4';
-        return up(idx - 1);
-    }
-    if (id[idx] == '2') {
-        id[idx] = '3';
-        return up(idx - 1);
-    }
-    if (id[idx] == '3') {
-        id[idx] = '2';
-        return true;
-    }
-    if (id[idx] == '4') {
-        id[idx] = '1';
-        return true;
-    }
-    return false;
-}
-
-bool down(int idx) {
-    if (idx >= d || idx < 0) {
-        return false;
-    }
-
-    if (id[idx] == '1') {
-        id[idx] = '4';
-        return true;
-    }
-    if (id[idx] == '2') {
-        id[idx] = '3';
-        return true;
-    }
-    if (id[idx] == '3') {
-        id[idx] = '2';
-        return down(idx - 1);
-    }
-    if (id[idx] == '4') {
-        id[idx] = '1';
-        return down(idx - 1);
-    }
-    return false;
-}
-
-bool (*h)(int idx) = left;
-bool (*v)(int idx) = up;
 
 int main() {
     fastio
 
-    cin >> d >> id;
-    cin >> x >> y;
+    cin >> N;
 
-    int sX = x < 0 ? -1 : 1;
-    int sY = y < 0 ? -1 : 1;
-
-    h = (x < 0) ? ::left : ::right;
-    v = (y < 0) ? ::down : ::up;
-
-    x = x < 0 ? -x : x;
-    y = y < 0 ? -y : y;
-
-    for (llong i = 49; i >= 0; --i) {
-        if (x & (1ll << i)) {
-            if (i > (d - 1)) {
-                cout << -1 << endl;
-                exit(0);
-            }
-            if (!h((d - 1) - i)) {
-                cout << -1 << endl;
-                exit(0);
-            }
+    For (i, N) {
+        For (j, 2 * N - 1) {
+            B[i][j] = ' ';
         }
     }
-    for (llong i = 49; i >= 0; --i) {
-        if (y & (1ll << i)) {
-            if (i > (d - 1)) {
-                cout << -1 << endl;
-                exit(0);
-            }
-            if (!v((d - 1) - i)) {
-                cout << -1 << endl;
-                exit(0);
-            }
-        }
+
+    tri(0, 0, N);
+
+    For (i, N) {
+        cout << B[i] << el;
     }
-    cout << id << endl;
+
+    return 0;
 }
