@@ -368,7 +368,7 @@ int main() {
             } else {
                 result.rbegin()->fi = max(result.rbegin()->fi, 0);
             }
-        } else if (get<0>(pq.top()) != curH) {
+        } else if (abs(get<0>(pq.top())) != curH) {
             curH = get<0>(pq.top());
             if (result.size() == 0 || (result.rbegin()->se != l && result.rbegin()->fi != curH)) {
                 result.push_back({curH, l});
